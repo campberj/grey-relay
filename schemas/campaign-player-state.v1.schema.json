@@ -1,0 +1,386 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/campberj/grey-relay/schemas/campaign-player-state.v1.schema.json",
+  "title": "GREY RELAY Player-Visible Campaign State v1 (provisional)",
+  "description": "Design-stage shape for an exported/saved player-only campaign projection. No GM secrets permitted.",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "fixture_kind",
+    "campaign_id",
+    "title",
+    "revision",
+    "fictional_clock",
+    "metrics",
+    "personnel",
+    "intelligence",
+    "taskings",
+    "narrative_flags"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "1.0.0"
+    },
+    "fixture_kind": {
+      "type": "string",
+      "const": "player_visible_campaign_state"
+    },
+    "fictional_only": {
+      "type": "boolean",
+      "const": true
+    },
+    "contains_gm_secrets": {
+      "type": "boolean",
+      "const": false
+    },
+    "campaign_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "campaign_template_id": {
+      "type": "string"
+    },
+    "title": {
+      "type": "string",
+      "minLength": 1
+    },
+    "rules_adapter": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string"
+    },
+    "revision": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "fictional_clock": {
+      "$ref": "#/$defs/clock"
+    },
+    "setting": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "command": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "metrics": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/metric"
+      }
+    },
+    "personnel": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/person"
+      }
+    },
+    "mission_history": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "mission_id",
+          "outcome"
+        ],
+        "properties": {
+          "mission_id": {
+            "type": "string"
+          },
+          "outcome": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      }
+    },
+    "intelligence": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/evidence"
+      }
+    },
+    "assessments": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "conclusion",
+          "citations"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "conclusion": {
+            "type": "string"
+          },
+          "citations": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "additionalProperties": true
+      }
+    },
+    "taskings": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/tasking"
+      }
+    },
+    "narrative_flags": {
+      "type": "object",
+      "additionalProperties": {
+        "type": [
+          "string",
+          "boolean",
+          "number",
+          "null"
+        ]
+      }
+    },
+    "notes": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "clock": {
+      "type": "object",
+      "required": [
+        "day",
+        "time_z"
+      ],
+      "properties": {
+        "day": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "time_z": {
+          "type": "string",
+          "pattern": "^([01][0-9]|2[0-3]):[0-5][0-9]$"
+        },
+        "precision": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    },
+    "observedTime": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/clock"
+        },
+        {
+          "type": "object",
+          "required": [
+            "day",
+            "time_z"
+          ],
+          "properties": {
+            "day": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "time_z": {
+              "type": "string",
+              "pattern": "^([01][0-9]|2[0-3]):[0-5][0-9]$"
+            }
+          },
+          "additionalProperties": false
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "metric": {
+      "type": "object",
+      "required": [
+        "key",
+        "value",
+        "min",
+        "max",
+        "kind"
+      ],
+      "properties": {
+        "key": {
+          "type": "string",
+          "minLength": 1
+        },
+        "value": {
+          "type": "integer"
+        },
+        "min": {
+          "type": "integer"
+        },
+        "max": {
+          "type": "integer"
+        },
+        "kind": {
+          "type": "string"
+        },
+        "source": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    },
+    "person": {
+      "type": "object",
+      "required": [
+        "id",
+        "name",
+        "role",
+        "accountability"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "name": {
+          "type": "string"
+        },
+        "callsign": {
+          "type": "string"
+        },
+        "affiliation": {
+          "type": "string"
+        },
+        "role": {
+          "type": "string"
+        },
+        "accountability": {
+          "enum": [
+            "unknown",
+            "present",
+            "evacuated",
+            "missing",
+            "returned",
+            "confirmed_kia",
+            "recovered"
+          ]
+        },
+        "last_known": {
+          "type": "string"
+        },
+        "injury": {
+          "type": "string"
+        },
+        "custody": {
+          "type": "string"
+        },
+        "fate": {
+          "type": "string"
+        },
+        "medical": {
+          "type": "string"
+        },
+        "status_notes": {
+          "type": "string"
+        },
+        "source": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    },
+    "evidence": {
+      "type": "object",
+      "required": [
+        "artifact_id",
+        "title",
+        "kind",
+        "confidence",
+        "claim",
+        "does_not_establish"
+      ],
+      "properties": {
+        "artifact_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "title": {
+          "type": "string"
+        },
+        "kind": {
+          "type": "string"
+        },
+        "observed_at": {
+          "$ref": "#/$defs/observedTime"
+        },
+        "confidence": {
+          "type": "string"
+        },
+        "claim": {
+          "type": "string"
+        },
+        "does_not_establish": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "tasking": {
+      "type": "object",
+      "required": [
+        "id",
+        "name",
+        "domain",
+        "status"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "domain": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string"
+        },
+        "effects": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "requires_player_authorization": {
+          "type": "boolean"
+        },
+        "committed": {
+          "type": "boolean"
+        },
+        "deployment_authorized": {
+          "type": "boolean"
+        },
+        "methods_under_consideration": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "area": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    }
+  }
+}
