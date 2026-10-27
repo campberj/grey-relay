@@ -1,0 +1,295 @@
+{
+  "schema_version": "1.0.0",
+  "fixture_kind": "player_visible_campaign_state",
+  "fictional_only": true,
+  "contains_gm_secrets": false,
+  "campaign_id": "ash-veil-demo",
+  "campaign_template_id": "operation-ash-veil",
+  "title": "Operation Ash Veil",
+  "rules_adapter": "blkout-reference-only",
+  "status": "active",
+  "revision": 1,
+  "fictional_clock": {
+    "day": 2,
+    "time_z": "18:45",
+    "precision": "narrative"
+  },
+  "setting": {
+    "theater": "ABOL — Sable Corridor",
+    "fan_campaign_geography": true,
+    "staging_area": "Sable Gate",
+    "focus_area": "Kappa Industrial"
+  },
+  "command": {
+    "player_callsign": "RAVEN ACTUAL",
+    "handler_callsign": "OVERWATCH",
+    "handler_name": "Captain Elias Mercer",
+    "commander_name": "Major Elena Voss",
+    "logistics_name": "CWO Tessa Kade"
+  },
+  "metrics": [
+    {
+      "key": "intelligence_quality",
+      "value": 2,
+      "min": 0,
+      "max": 5,
+      "kind": "campaign_only",
+      "source": "NEEDLE IN THE NOISE debrief"
+    },
+    {
+      "key": "authority_alert",
+      "value": 4,
+      "min": 0,
+      "max": 5,
+      "kind": "campaign_only",
+      "source": "SILENT RESIDENT AAR"
+    },
+    {
+      "key": "logistical_support",
+      "value": 3,
+      "min": 0,
+      "max": 5,
+      "kind": "campaign_only",
+      "source": "SILENT RESIDENT campaign ledger"
+    },
+    {
+      "key": "civilian_confidence",
+      "value": 1,
+      "min": 0,
+      "max": 5,
+      "kind": "campaign_only",
+      "source": "SILENT RESIDENT campaign ledger"
+    }
+  ],
+  "personnel": [
+    {
+      "id": "op-veil",
+      "name": "WO Ana Varga",
+      "callsign": "VEIL",
+      "affiliation": "Task Force Boone",
+      "role": "Covert Handler",
+      "accountability": "missing",
+      "last_known": "Safe Flat, Habitat Nine",
+      "injury": "unknown",
+      "custody": "unknown",
+      "fate": "unknown",
+      "source": "M001 AAR"
+    },
+    {
+      "id": "op-calder",
+      "name": "Spc Nia Calder",
+      "affiliation": "Task Force Boone",
+      "role": "Marksman Spotter",
+      "accountability": "missing",
+      "last_known": "Western rooftop, Habitat Nine",
+      "injury": "unknown",
+      "custody": "unknown",
+      "fate": "unknown",
+      "source": "M001 AAR"
+    },
+    {
+      "id": "op-venn",
+      "name": "Cpl Tomas Venn",
+      "affiliation": "Task Force Boone",
+      "role": "Marksman",
+      "accountability": "returned",
+      "medical": "uninjured_reported",
+      "status_notes": "Withdrew west without recovering Calder; requested permission to volunteer for recovery",
+      "source": "M001 AAR"
+    },
+    {
+      "id": "op-saw-unnamed",
+      "name": "Recon SAW Gunner (name unconfirmed)",
+      "affiliation": "Task Force Boone",
+      "role": "Recon SAW",
+      "accountability": "evacuated",
+      "medical": "wounded_requires_assessment",
+      "source": "M001 AAR"
+    }
+  ],
+  "mission_history": [
+    {
+      "mission_id": "m001",
+      "codename": "SILENT RESIDENT",
+      "area": "Habitat Nine",
+      "status": "completed",
+      "outcome": "failure",
+      "summary": "Informant not contacted; no intelligence recovered. Recon and surviving Marksman withdrew; two Boone personnel MIA.",
+      "enemy_ooa_reported": {
+        "un_riflemen": 5,
+        "pointmen": 1
+      },
+      "friendly_missing_ids": [
+        "op-veil",
+        "op-calder"
+      ],
+      "friendly_recovered_wounded_ids": [
+        "op-saw-unnamed"
+      ],
+      "source": "Player AAR and accepted GM addendum"
+    }
+  ],
+  "intelligence": [
+    {
+      "artifact_id": "sig-tlm",
+      "title": "Possible Habitat Nine medical transport departure",
+      "kind": "sigint_report",
+      "observed_at": {
+        "day": 1,
+        "time_z": "20:50"
+      },
+      "confidence": "moderate",
+      "claim": "A possible medical transport departed eastern access road",
+      "does_not_establish": [
+        "passenger_identity",
+        "destination"
+      ]
+    },
+    {
+      "artifact_id": "sig-gate4",
+      "title": "Kappa Gate Four priority crossing",
+      "kind": "telemetry",
+      "observed_at": {
+        "day": 1,
+        "time_z": "21:16"
+      },
+      "confidence": "high_for_gate_event",
+      "claim": "An unidentified priority vehicle entered Kappa Industrial",
+      "does_not_establish": [
+        "same_vehicle_as_sig_tlm",
+        "passengers"
+      ]
+    },
+    {
+      "artifact_id": "sig-med",
+      "title": "K-17 trauma module requisition",
+      "kind": "requisition_metadata",
+      "observed_at": {
+        "day": 1,
+        "time_z": "21:24"
+      },
+      "confidence": "moderate_relevance",
+      "claim": "Two trauma stabilization modules requested",
+      "does_not_establish": [
+        "patient_identity",
+        "custody"
+      ]
+    },
+    {
+      "artifact_id": "sig-net",
+      "title": "K-17 security medical network association",
+      "kind": "network_metadata",
+      "observed_at": null,
+      "confidence": "high_for_association",
+      "claim": "Traffic associated with Authority security-medical coordination",
+      "does_not_establish": [
+        "detention_center"
+      ]
+    },
+    {
+      "artifact_id": "sig-frag",
+      "title": "Special Handling fragment",
+      "kind": "intercept_fragment",
+      "observed_at": null,
+      "confidence": "moderate_reconstruction",
+      "claim": "TRANSFER STATUS: HOLD; MEDICAL CLEARANCE: PENDING",
+      "does_not_establish": [
+        "subject_identity",
+        "target_building"
+      ]
+    },
+    {
+      "artifact_id": "sig-cred",
+      "title": "Informant credentials flagged",
+      "kind": "security_report",
+      "observed_at": {
+        "day": 1,
+        "time_z": "17:56"
+      },
+      "confidence": "pending_corroboration",
+      "claim": "Source access credentials flagged before insertion",
+      "does_not_establish": [
+        "source_betrayal"
+      ]
+    },
+    {
+      "artifact_id": "sig-lock",
+      "title": "Civil corridor access restriction",
+      "kind": "municipal_report",
+      "observed_at": {
+        "day": 1,
+        "time_z": "18:42"
+      },
+      "confidence": "pending_corroboration",
+      "claim": "Authority restrictions preceded RAVEN's mission",
+      "does_not_establish": [
+        "deliberate_ambush"
+      ]
+    }
+  ],
+  "assessments": [
+    {
+      "id": "assess-k17",
+      "conclusion": "Annex K-17 is the strongest current collection lead",
+      "confidence": "moderate",
+      "citations": [
+        "sig-gate4",
+        "sig-med",
+        "sig-net",
+        "sig-frag"
+      ],
+      "explicit_unknowns": [
+        "VEIL condition",
+        "Calder condition",
+        "actual custody",
+        "precise transport destination"
+      ],
+      "status": "approved_intel_assessment"
+    }
+  ],
+  "taskings": [
+    {
+      "id": "task-needle",
+      "name": "NEEDLE IN THE NOISE",
+      "domain": "sigint",
+      "status": "completed",
+      "effects": [
+        "assess-k17"
+      ]
+    },
+    {
+      "id": "task-grey",
+      "name": "GREY RELAY",
+      "domain": "fictional_cyber_game",
+      "status": "proposed",
+      "requires_player_authorization": true,
+      "committed": false
+    },
+    {
+      "id": "task-cold",
+      "name": "COLD NORTH recon proposal",
+      "domain": "physical_isr",
+      "status": "proposed",
+      "deployment_authorized": false,
+      "methods_under_consideration": [
+        "op_lp",
+        "sensor_emplacement"
+      ],
+      "area": "Kappa Industrial"
+    }
+  ],
+  "narrative_flags": {
+    "varga_fate": "unresolved",
+    "calder_fate": "unresolved",
+    "informant_fate": "unresolved",
+    "k17_custody": "unconfirmed",
+    "cold_north_deployed": false,
+    "grey_relay_played": false
+  },
+  "notes": [
+    "Sample illustrates player knowledge only, not hidden GM truth or actual persisted application data.",
+    "Campaign meters are fan-campaign bookkeeping, not BLKOUT game stats.",
+    "No person is confirmed captive or dead.",
+    "Time/clock data are narrative approximations unless sourced."
+  ]
+}
