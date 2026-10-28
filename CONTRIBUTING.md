@@ -2,7 +2,7 @@
 
 Read [README.md](README.md), [AGENTS.md](AGENTS.md) and [docs/AGENT_HANDOFF.md](docs/AGENT_HANDOFF.md) first. Architecture decisions live in [docs/adr/](docs/adr/). The stack is defined by [ADR 0001](docs/adr/0001-s0-stack-and-local-persistence.md).
 
-**Current state:** S0 skeleton. An API with a health route and an empty campaign list, plus a web shell with placeholder Campaign Library and Operations Center screens. There is no persistence and no gameplay yet.
+**Current state:** S0 skeleton plus the S1 event journal. The API has a health route, an empty campaign list and an append-only SQLite event journal (not yet exposed through the API). The web shell has placeholder Campaign Library and Operations Center screens. There are no campaign features or gameplay yet.
 
 ## Prerequisites (macOS, no Docker)
 
@@ -38,6 +38,18 @@ Health check:
 curl http://localhost:5080/api/health        # Healthy
 ```
 
+### Database
+
+The API creates and migrates its SQLite database on startup and logs the path it uses ([ADR 0002](docs/adr/0002-campaign-event-journal-and-import.md) §2.9):
+
+| Context | Location |
+| --- | --- |
+| Development | `.data/greyrelay.dev.db` in the repository (git-ignored) |
+| Normal use | `~/Library/Application Support/GreyRelay/greyrelay.db` |
+| Override | `Storage:DatabasePath` setting or the `Storage__DatabasePath` environment variable |
+
+To reset development data, stop the API and delete `.data/`.
+
 The API listens on `localhost` only and rejects requests with a non-`localhost` `Host` header. In Development it serves its OpenAPI document at <http://localhost:5080/openapi/v1.json>.
 
 ## Everyday commands
@@ -50,6 +62,8 @@ The API listens on `localhost` only and rejects requests with a non-`localhost` 
 | Web lint, types, format check | `npm run lint --prefix src/web`, `npm run typecheck --prefix src/web`, `npm run format:check --prefix src/web` |
 | Web format fix | `npm run format --prefix src/web` |
 | Regenerate API types | `dotnet build`, then `npm run gen:api --prefix src/web` |
+| Add an EF Core migration | `dotnet tool restore`, then `dotnet ef migrations add <Name> --project src/api/GreyRelay.Infrastructure --startup-project src/api/GreyRelay.Infrastructure --output-dir Persistence/Migrations` |
+| Check migrations match the model | `dotnet ef migrations has-pending-model-changes --project src/api/GreyRelay.Infrastructure --startup-project src/api/GreyRelay.Infrastructure` |
 
 CI ([.github/workflows/ci.yml](.github/workflows/ci.yml)) runs all of the above on macOS and Linux for every pull request.
 
@@ -70,6 +84,7 @@ tests/                            one test project per layer, plus architecture 
 - **The API contract is generated.** The API build writes `src/web/openapi/GreyRelay.Api.json`, and `npm run gen:api` turns it into `src/web/src/api/schema.d.ts`. Commit both. CI fails if they are out of date.
 - **The web client reaches data only through ports.** Components call `CampaignApi` via context, never `fetch` directly; tests inject fakes.
 - **Warnings are errors** in .NET builds.
+- **The event journal is append-only.** Database triggers reject `UPDATE`, `DELETE` and out-of-sequence inserts on `campaign_events`. Fix mistakes with correction events (ADR 0002 §2.5), never by editing rows. A migration that rebuilds that table must recreate its triggers.
 
 ## Workflow
 
@@ -95,4 +110,6 @@ tests/                            one test project per layer, plus architecture 
 | `node -v` shows a version other than 26 | Install or select Node 26 (see Prerequisites). `npm ci` warns when `engines` doesn't match. |
 | `dyld: Library not loaded … libsimdjson` when running `node` | Your Homebrew `node` formula is out of date with a shared library. Run `brew upgrade node`. |
 | `Testing with VSTest target is no longer supported` | Run `dotnet test` from the repository root, so `global.json` opts into Microsoft.Testing.Platform. |
+| CI fails at "Check EF Core migrations match the model" | Add a migration for your model change (see Everyday commands) and commit it. |
+| `SQLite Error 19: 'campaign_events is append-only…'` | Working as intended: history cannot be edited. Append a correction event instead. |
 | CI fails at "Check API contract is up to date" | Run `dotnet build`, then `npm run gen:api --prefix src/web`, and commit the two regenerated files. |

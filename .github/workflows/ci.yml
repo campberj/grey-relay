@@ -47,6 +47,12 @@ jobs:
       - name: Test .NET
         run: dotnet test --no-build --configuration Release
 
+      - name: Check EF Core migrations match the model
+        run: |
+          dotnet tool restore
+          dotnet ef migrations has-pending-model-changes \
+            --project src/api/GreyRelay.Infrastructure --startup-project src/api/GreyRelay.Infrastructure
+
       - name: Install web dependencies
         working-directory: src/web
         run: npm ci

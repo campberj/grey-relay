@@ -1,8 +1,13 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" PrivateAssets="all" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="../GreyRelay.Application/GreyRelay.Application.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <InternalsVisibleTo Include="GreyRelay.Infrastructure.Tests" />
   </ItemGroup>
 </Project>

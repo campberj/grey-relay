@@ -1,12 +1,11 @@
 using System.Net;
 using System.Net.Http.Json;
 using GreyRelay.Application.Campaigns;
-using Microsoft.AspNetCore.Mvc.Testing;
 
 namespace GreyRelay.Api.Tests;
 
-public sealed class ApiEndpointTests(WebApplicationFactory<Program> factory)
-    : IClassFixture<WebApplicationFactory<Program>>
+public sealed class ApiEndpointTests(GreyRelayApiFactory factory)
+    : IClassFixture<GreyRelayApiFactory>
 {
     [Fact]
     public async Task Health_returns_healthy()
@@ -17,6 +16,17 @@ public sealed class ApiEndpointTests(WebApplicationFactory<Program> factory)
 
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
         Assert.Equal("Healthy", await response.Content.ReadAsStringAsync(TestContext.Current.CancellationToken));
+    }
+
+    [Fact]
+    public async Task Startup_creates_and_migrates_the_configured_database()
+    {
+        using var client = factory.CreateClient();
+
+        using var response = await client.GetAsync(new Uri("/api/health", UriKind.Relative), TestContext.Current.CancellationToken);
+
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        Assert.True(File.Exists(factory.DatabasePath));
     }
 
     [Fact]
