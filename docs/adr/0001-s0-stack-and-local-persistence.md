@@ -34,6 +34,7 @@ Local toolchain at the time of writing: .NET SDK 10.0.402 and Node v25.6.1 (not 
 | Concern | Decision | Label |
 | --- | --- | --- |
 | Frontend | React + TypeScript (strict) + Vite | [OWNER] |
+| TypeScript version | **5.9.x**, not 7.x. Current typescript-eslint only supports TypeScript below 6.1, and openapi-typescript declares TypeScript 5 only. Move to 7.x in a focused PR once those tools support it | [OWNER] (amendment, 2026-10-27) |
 | Backend | ASP.NET Core on **.NET 10 (LTS)** | [OWNER] |
 | .NET SDK pin | `global.json` → `10.0.400`, `rollForward: latestFeature` | [PROPOSED] |
 | Node.js | **Node 24 LTS**, pinned via `.nvmrc` and `package.json` `engines` | [OWNER] |
@@ -111,6 +112,7 @@ Rationale: the layering follows Clean Architecture. Each project has one reason 
 | Concern | Decision | Label |
 | --- | --- | --- |
 | .NET tests | xUnit v3; in-process API tests via `WebApplicationFactory` | [PROPOSED] |
+| .NET test runner | Microsoft.Testing.Platform, enabled via the `test.runner` setting in `global.json`. The .NET 10 SDK no longer supports running xUnit v3 through VSTest | [PROPOSED] (amendment, 2026-10-27) |
 | Web tests | Vitest + React Testing Library. Playwright end-to-end tests added in S3, not S0 | [PROPOSED] |
 | .NET lint/format | `.editorconfig`, `dotnet format --verify-no-changes`, nullable enabled, warnings as errors | [PROPOSED] |
 | Web lint/format | ESLint (typescript-eslint) + Prettier; `tsc --noEmit` | [PROPOSED] |
