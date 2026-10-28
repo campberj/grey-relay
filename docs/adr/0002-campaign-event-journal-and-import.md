@@ -1,6 +1,6 @@
 # ADR 0002 — Campaign event journal, local storage and import fidelity
 
-**Status:** Proposed — awaiting owner review in PR.
+**Status:** Accepted — merged in PR #6 (2026-10-28 UTC). Amended 2026-10-28: `recorded_by` added to the envelope; Q2.1 closed.
 **Date:** 2026-10-27
 **Owner / decider:** project owner (RAVEN ACTUAL)
 **Implementer:** technical implementation agent
@@ -61,8 +61,9 @@ Fields follow CONTENT_CONTRACTS §8:
 | `sequence` | Per-campaign, gap-free, starts at 1. Unique `(campaign_id, sequence)`. **Campaign revision = last sequence** |
 | `event_type` | Dotted name, e.g. `operator.accountability_changed` |
 | `event_schema_version` | Integer, per event type |
-| `actor` | `{kind: player\|gm\|system\|import, id}` |
-| `authority` | What authorised it, e.g. a player order, GM ruling, import or correction |
+| `actor` | `{kind: player\|gm\|system\|import, id}`: who made the decision |
+| `recorded_by` | `{kind, id}`: who entered it into the app. Differs from `actor` when the owner records a chat GM ruling (ADR 0003 Q3.3) |
+| `authority` | `{kind, reference}`: what authorised it, e.g. `player_order`, `gm_ruling` (citing the chat ruling), `import` or `correction` |
 | `causation_id`, `correlation_id` | Optional links to the triggering command, AAR or session |
 | `occurred_fictional` | Campaign clock `{day, time_z, precision}`, or explicit `unknown`. Never fabricated precision |
 | `recorded_at_utc` | From the injected clock |
@@ -175,7 +176,7 @@ No existing data needs migrating; S0 persisted nothing.
 
 | ID | Question | Blocks |
 | --- | --- | --- |
-| Q2.1 | Player-visible revision numbers reveal *how many* GM-only events exist, as gaps in the player's view. Acceptable locally, or should the player view use its own counter? | S2 |
+| ~~Q2.1~~ | **Closed as moot (2026-10-28):** the AI is the sole GM (ADR 0003). Rulings entered by the owner are player-visible, and GM-only content lives in the separate GM database, not this journal. The journal therefore has no hidden events, and revision numbers have no hidden gaps. Reopen if GM-only journal events are ever introduced. | — |
 | Q2.2 | Should an imported campaign's genesis event keep the source file's `revision` value, or always restart at sequence 1 and record the original revision as metadata? Recommendation: restart at 1 and keep the original as metadata. | S1 step 4 |
 
 ## 8. Acceptance checks
