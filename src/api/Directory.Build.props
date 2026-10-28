@@ -1,0 +1,13 @@
+<Project>
+  <Import Project="$([MSBuild]::GetPathOfFileAbove('Directory.Build.props', '$(MSBuildThisFileDirectory)../'))" />
+
+  <!--
+    Pure layers (Domain, Application) opt in with <EnforcePureLayer>true</EnforcePureLayer>.
+    BannedSymbols.txt forbids process, network, file-system, reflection-loading and
+    nondeterministic APIs there (README invariants 9 and 11).
+  -->
+  <ItemGroup Condition="'$(EnforcePureLayer)' == 'true'">
+    <PackageReference Include="Microsoft.CodeAnalysis.BannedApiAnalyzers" PrivateAssets="all" />
+    <AdditionalFiles Include="$(MSBuildThisFileDirectory)BannedSymbols.txt" />
+  </ItemGroup>
+</Project>

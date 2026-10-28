@@ -1,0 +1,5 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <ItemGroup>
+    <ProjectReference Include="../../src/api/GreyRelay.Domain/GreyRelay.Domain.csproj" />
+  </ItemGroup>
+</Project>
