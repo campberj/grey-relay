@@ -1,6 +1,6 @@
 # ADR 0003 — Protecting GM-only information in local single-user mode
 
-**Status:** Proposed — awaiting owner review in PR.
+**Status:** Accepted — merged in PR #6 (2026-10-28 UTC). Amended 2026-10-28 with owner decisions on Q3.2 and Q3.3.
 **Date:** 2026-10-27
 **Owner / decider:** project owner (RAVEN ACTUAL)
 **Implementer:** technical implementation agent
@@ -25,6 +25,8 @@ Today, GM truth for ASH VEIL lives **outside the app**, with the conversational 
 
 **The conversational AI is the GM exclusively** [OWNER, 2026-10-27]. The owner is only ever the player, so the app has **no human GM user**. Nothing needs a "GM mode" switch that would let the owner see GM data.
 
+**GM content packs may be committed to the public repository** [OWNER, 2026-10-28]. Anyone who opens them has chosen to spoil the puzzle for themselves; that is accepted.
+
 ## 2. Decision
 
 ### 2.1 Threat model: prevent accidental spoilers, not a determined owner
@@ -32,7 +34,9 @@ Today, GM truth for ASH VEIL lives **outside the app**, with the conversational 
 In local mode, the boundary exists to stop GM-only information reaching the player **by accident**:
 
 - through the UI, API responses, the JavaScript bundle or exports
-- through logs, error messages, or the public repository
+- through logs or error messages
+
+GM pack files committed to the repository are **not** an accidental channel: opening one is a deliberate act [OWNER]. They must still be clearly marked (§2.3) and never mixed into player-visible files.
 
 It does not try to stop the owner deliberately reading their own disk; that is impossible without real authentication, which is deferred [OWNER]. The design must still be the same shape that later hosting with real auth needs, so nothing gets retrofitted.
 
@@ -54,6 +58,8 @@ Nothing is built ahead of its stage. Because the AI is the only GM [OWNER], **th
 - **Reveals go through the main journal.** A reveal writes a player-visible event to the main journal (ADR 0002), referencing the GM fact's ID, and is idempotent. The main journal is authoritative for *what has been revealed*. The GM file only records *what exists*.
 
 This extends ADR 0001 §2.4, which specified separate tables, by moving those tables into their own file.
+
+**GM files in a content pack** use the `*.gm.json` suffix (CONTENT_CONTRACTS §2). The importer routes them only into the GM database, and the player-state importer rejects them. They may be committed to the repository or supplied privately [OWNER]. They are never placed in `examples/` or any player-state fixture, and never imported by the web client.
 
 ### 2.4 GM access (from S5, only if AI GM integration is approved)
 
@@ -93,8 +99,8 @@ These routes would serve a **machine client** acting for the AI GM, never a huma
 | ID | Question | Blocks |
 | --- | --- | --- |
 | ~~Q3.1~~ | **Resolved [OWNER, 2026-10-27]:** the conversational AI is the GM exclusively. There is no human GM user or GM Desk screen (§1, §2.2). | — |
-| Q3.2 | How does an AI-authored S3 puzzle rubric reach the private GM file without the owner (the player) reading it, and without passing through the public repository? Recommendation: the AI GM supplies a private content pack file, which the owner imports with a command-line import that validates it **without printing its contents**. The file is never committed. | S3 |
-| Q3.3 | GM rulings happen in chat. Should the owner enter them into the app as events, with `actor.kind = gm` and `authority` citing the chat ruling, or should the app only record player-reported outcomes until AI GM integration exists? | S4 (AAR) |
+| ~~Q3.2~~ | **Resolved [OWNER, 2026-10-28]:** the AI GM either supplies the GM pack as a private file or commits it to the repository; self-spoiling is accepted. Import validates it **without printing GM contents**, either way (§2.3). | — |
+| ~~Q3.3~~ | **Resolved [OWNER, 2026-10-28]:** GM rulings made in chat are entered into the app by the owner as events. Each has `actor = {kind: gm, id: <campaign GM identity, e.g. overwatch>}` and `recorded_by = {kind: player, id: owner}`. Its `authority` is `{kind: gm_ruling, reference: <citation of the chat ruling>}`. The envelope therefore always shows both who ruled and who typed it in (ADR 0002 §2.3). | — |
 
 ## 6. Acceptance checks
 

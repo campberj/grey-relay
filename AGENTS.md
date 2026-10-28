@@ -7,7 +7,7 @@ Read **README.md** and **docs/AGENT_HANDOFF.md** before implementing features. T
 - Do not invent tabletop rules, new campaign outcomes, casualty fate, or deployment orders.
 - **VEIL and Calder are MIA, fate unknown.** **COLD NORTH is not deployed.** K-17 is an intelligence lead, not confirmed custody.
 - Separate source observation, inference, proposed event, committed event and GM-hidden truth.
-- Keep hidden puzzle answers and GM secrets out of player APIs, frontend bundles and public seed files.
+- Keep hidden puzzle answers and GM secrets out of player APIs, frontend bundles, exports, logs and player-state fixtures. GM content packs (`*.gm.json`) may be committed to the repo or supplied privately; never mix GM data into player-visible files (ADR 0003).
 - No real hacking: console commands must be fictional, allowlisted application actions. No shell, arbitrary code execution, credential collection or scanning.
 - No BLKOUT copyrighted PDFs, commercial cards/art/STLs, or third-party assets in public repo without explicit rights.
 - Use macOS-native developer workflow; do not require Docker.
