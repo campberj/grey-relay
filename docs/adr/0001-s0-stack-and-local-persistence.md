@@ -1,6 +1,6 @@
 # ADR 0001 — S0 runtime, local persistence and privacy boundary
 
-**Status:** Proposed — awaiting owner review in PR.
+**Status:** Accepted — merged in PR #3 (2026-10-28 UTC).
 **Date:** 2026-10-27
 **Owner / decider:** project owner (RAVEN ACTUAL)
 **Implementer:** technical implementation agent
