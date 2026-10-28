@@ -37,7 +37,7 @@ Local toolchain at the time of writing: .NET SDK 10.0.402 and Node v25.6.1 (not 
 | TypeScript version | **5.9.x**, not 7.x. Current typescript-eslint only supports TypeScript below 6.1, and openapi-typescript declares TypeScript 5 only. Move to 7.x in a focused PR once those tools support it | [OWNER] (amendment, 2026-10-27) |
 | Backend | ASP.NET Core on **.NET 10 (LTS)** | [OWNER] |
 | .NET SDK pin | `global.json` → `10.0.400`, `rollForward: latestFeature` | [PROPOSED] |
-| Node.js | **Node 24 LTS**, pinned via `.nvmrc` and `package.json` `engines` | [OWNER] |
+| Node.js | **Node 26 LTS**, pinned via `.nvmrc` and `package.json` `engines`. Originally Node 24 LTS; moved to 26, which enters LTS on 2026-10-28 | [OWNER] (amendment, 2026-10-27) |
 | JS package manager | npm (ships with Node; avoids an extra prerequisite) | [PROPOSED] |
 
 ### 2.2 Persistence
@@ -124,7 +124,7 @@ Rationale: the layering follows Clean Architecture. Each project has one reason 
 [PROPOSED]
 
 ~~~sh
-brew install node@24          # prerequisite; .NET 10 SDK also required
+brew install node@26          # prerequisite; .NET 10 SDK also required
 dotnet restore && npm ci --prefix src/web
 dotnet test                   # all .NET tests
 npm test --prefix src/web     # web tests
@@ -172,7 +172,7 @@ No data migration: no persisted data exists yet.
 - **EF Core** blocks event-journal requirements such as append-only sequence guarantees or projection performance → replace those adapters with Dapper.
 - **SQLite** concurrency or locking breaks local multi-tab use → bring the PostgreSQL ADR forward.
 - **Hosting** is required → a new auth/identity ADR supersedes §2.3.
-- **Node 24** support or Vite compatibility issues → update the Node pin in a focused PR.
+- **Node 26** support or Vite compatibility issues → update the Node pin in a focused PR.
 
 ## 7. Open questions
 
@@ -186,7 +186,7 @@ No data migration: no persisted data exists yet.
 
 ## 8. S0 acceptance checks for this decision
 
-- [ ] Fresh macOS clone with only the .NET 10 SDK and Node 24 installed starts API and web using documented commands, without Docker.
+- [ ] Fresh macOS clone with only the .NET 10 SDK and Node 26 installed starts API and web using documented commands, without Docker.
 - [ ] `GET /api/health` returns 200 on `localhost`.
 - [ ] `dotnet test` and `npm test` pass locally and in CI on macOS and Linux.
 - [ ] Format/lint checks fail CI on violations.

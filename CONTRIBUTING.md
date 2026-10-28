@@ -9,13 +9,13 @@ Read [README.md](README.md), [AGENTS.md](AGENTS.md) and [docs/AGENT_HANDOFF.md](
 | Tool | Version | Install |
 | --- | --- | --- |
 | .NET SDK | 10.0.400 or later 10.0.x (pinned in [global.json](global.json)) | <https://dotnet.microsoft.com/download> |
-| Node.js | 24 LTS (pinned in [.nvmrc](.nvmrc)) | `brew install node@24`, `nvm install`, or `fnm use` |
+| Node.js | 26 LTS (pinned in [.nvmrc](.nvmrc)) | `brew install node@26`, `nvm install`, or `fnm use` |
 
-`node@24` from Homebrew is keg-only, so it won't replace another `node` already on your `PATH`. Put it first for this project:
+In Homebrew, `node@26` is currently an alias for the main `node` formula. Once Node 27 ships it becomes a separate keg-only formula; then put it first on your `PATH` for this project:
 
 ```sh
-export PATH="$(brew --prefix node@24)/bin:$PATH"
-node -v   # v24.x
+export PATH="$(brew --prefix node@26)/bin:$PATH"
+node -v   # v26.x
 ```
 
 ## First run
@@ -92,7 +92,7 @@ tests/                            one test project per layer, plus architecture 
 | Symptom | Fix |
 | --- | --- |
 | `Error: Port 5173 is already in use` | Another Vite server is running. Stop it, or run `npm run dev --prefix src/web -- --port 5174`. |
-| `node -v` shows a version other than 24 | Put `node@24` first on `PATH` (see Prerequisites). `npm ci` warns when `engines` doesn't match. |
-| `dyld: Library not loaded … libsimdjson` when running `node` | Your Homebrew `node` formula is out of date with a shared library. Run `brew upgrade node`, or use `node@24` as above. |
+| `node -v` shows a version other than 26 | Install or select Node 26 (see Prerequisites). `npm ci` warns when `engines` doesn't match. |
+| `dyld: Library not loaded … libsimdjson` when running `node` | Your Homebrew `node` formula is out of date with a shared library. Run `brew upgrade node`. |
 | `Testing with VSTest target is no longer supported` | Run `dotnet test` from the repository root, so `global.json` opts into Microsoft.Testing.Platform. |
 | CI fails at "Check API contract is up to date" | Run `dotnet build`, then `npm run gen:api --prefix src/web`, and commit the two regenerated files. |
