@@ -1,0 +1,5 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <ItemGroup>
+    <ProjectReference Include="../../src/api/GreyRelay.Infrastructure/GreyRelay.Infrastructure.csproj" />
+  </ItemGroup>
+</Project>
