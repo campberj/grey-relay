@@ -1,0 +1,79 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build-and-test:
+    name: Build and test (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        # macOS proves the native, Docker-free workflow; Linux is the fast check.
+        os: [macos-latest, ubuntu-latest]
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-dotnet@v6
+        with:
+          global-json-file: global.json
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+          cache-dependency-path: src/web/package-lock.json
+
+      - name: Restore .NET
+        run: dotnet restore
+
+      - name: Check .NET formatting
+        run: dotnet format --verify-no-changes --no-restore
+
+      - name: Build .NET (also emits the OpenAPI document)
+        run: dotnet build --no-restore --configuration Release
+
+      - name: Test .NET
+        run: dotnet test --no-build --configuration Release
+
+      - name: Install web dependencies
+        working-directory: src/web
+        run: npm ci
+
+      - name: Check API contract is up to date
+        working-directory: src/web
+        run: |
+          npm run gen:api
+          git diff --exit-code -- openapi src/api/schema.d.ts \
+            || { echo "::error::API contract drift. Run 'dotnet build' and 'npm run gen:api --prefix src/web', then commit."; exit 1; }
+
+      - name: Check web formatting
+        working-directory: src/web
+        run: npm run format:check
+
+      - name: Lint web
+        working-directory: src/web
+        run: npm run lint
+
+      - name: Typecheck web
+        working-directory: src/web
+        run: npm run typecheck
+
+      - name: Test web
+        working-directory: src/web
+        run: npm test
+
+      - name: Build web
+        working-directory: src/web
+        run: npm run build

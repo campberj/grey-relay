@@ -2,7 +2,7 @@
 
 **A persistent, campaign-agnostic tactical operations center, intelligence investigation game, and fictional cyber-operations simulator for narrative tabletop wargaming.**
 
-> **Project status: foundation / design handoff.** This repository currently contains documentation and example data, **not a working application**. Features and technical choices described as proposed are not implemented or approved rules. The first playable pilot is **Operation ASH VEIL**, a persistent solo BLKOUT campaign. The engine must also support future campaigns in other settings and game systems.
+> **Project status: S0 skeleton.** This repository contains documentation, example data and a runnable local skeleton (API health route, empty Campaign Library, placeholder Operations Center). There is **no persistence or gameplay yet**. To run it, see [CONTRIBUTING.md](CONTRIBUTING.md). Features and technical choices described as proposed are not implemented or approved rules. The first playable pilot is **Operation ASH VEIL**, a persistent solo BLKOUT campaign. The engine must also support future campaigns in other settings and game systems.
 
 **Repository:** https://github.com/campberj/grey-relay  
 **Owner / product authority:** campaign player and project owner  
