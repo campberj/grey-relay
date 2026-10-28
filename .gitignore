@@ -1,0 +1,22 @@
+# .NET
+bin/
+obj/
+*.user
+TestResults/
+
+# Node
+node_modules/
+dist/
+coverage/
+*.tsbuildinfo
+
+# Local data and environment
+.data/
+.env
+.env.*
+!.env.example
+
+# Editors / OS
+.vs/
+.idea/
+.DS_Store

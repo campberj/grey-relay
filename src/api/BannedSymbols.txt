@@ -1,0 +1,17 @@
+T:System.Diagnostics.Process;Domain/Application code must never start processes (README invariant 11)
+T:System.Diagnostics.ProcessStartInfo;Domain/Application code must never start processes (README invariant 11)
+N:System.Net;Domain/Application code must never perform network access (README invariant 11)
+N:System.Net.Http;Domain/Application code must never perform network access (README invariant 11)
+N:System.Net.Sockets;Domain/Application code must never perform network access (README invariant 11)
+T:System.IO.File;Access storage through an Application port, not the file system
+T:System.IO.Directory;Access storage through an Application port, not the file system
+T:System.IO.FileStream;Access storage through an Application port, not the file system
+M:System.Reflection.Assembly.Load(System.String);No dynamic code loading (ARCHITECTURE section 7)
+M:System.Reflection.Assembly.LoadFrom(System.String);No dynamic code loading (ARCHITECTURE section 7)
+M:System.Reflection.Assembly.LoadFile(System.String);No dynamic code loading (ARCHITECTURE section 7)
+P:System.DateTime.Now;Use an injected clock so behavior is replayable (README invariant 9)
+P:System.DateTime.UtcNow;Use an injected clock so behavior is replayable (README invariant 9)
+P:System.DateTimeOffset.Now;Use an injected clock so behavior is replayable (README invariant 9)
+P:System.DateTimeOffset.UtcNow;Use an injected clock so behavior is replayable (README invariant 9)
+M:System.Guid.NewGuid;Use an injected ID generator so behavior is replayable (README invariant 9)
+T:System.Random;Randomness must be seeded and recorded through a port (README invariant 9)
